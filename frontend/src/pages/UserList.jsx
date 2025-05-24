@@ -14,14 +14,14 @@ function UserList() {
     axios.get(`http://localhost:8000/?page=${page}`)
       .then(res => {
         setUsers(res.data.results);
-        setCount(Math.ceil(res.data.count / 10)); // если page_size=10
+        setCount(Math.ceil(res.data.count / 10));
       });
   }, [page]);
 
     return (
     <Container sx={{ mt: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Пользователи
+        Users
       </Typography>
       <Grid container spacing={2}>
         {users.map(user => (

@@ -21,7 +21,7 @@ function UserDetail() {
         if (err.response?.status === 404) {
           setNotFound(true);
         } else {
-          console.error("Ошибка загрузки:", err);
+          console.error("Loading error:", err);
         }
       })
       .finally(() => setLoading(false));
@@ -32,7 +32,7 @@ function UserDetail() {
   if (notFound) {
     return (
       <Container sx={{ mt: 4 }}>
-        <Alert severity="error">Пользователь не найден (404)</Alert>
+        <Alert severity="error">User not found (404)</Alert>
       </Container>
     );
   }
@@ -45,9 +45,9 @@ function UserDetail() {
           <div>
             <Typography variant="h5">{user.first_name} {user.last_name}</Typography>
             <Typography>Email: {user.email}</Typography>
-            <Typography>Телефон: {user.phone}</Typography>
-            <Typography>Локация: {user.location}</Typography>
-            <Typography>Пол: {user.gender}</Typography>
+            <Typography>Phone: {user.phone}</Typography>
+            <Typography>Location: {user.location}</Typography>
+            <Typography>Gender: {user.gender}</Typography>
           </div>
         </CardContent>
       </Card>
