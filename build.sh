@@ -1,8 +1,29 @@
 #!/bin/bash
 
+if pgrep -x postgres > /dev/null; then
+    echo "PostgreSQL is up"
+else
+    echo "PostgreSQL is down!"
+    exit 1
+fi
+
+if [ -f .env ]; then
+    export $(grep -v '^#' .env | xargs)
+    echo ".env successfully loaded"
+else
+    echo ".env not found!"
+    exit 1
+fi
+
+cp .env random_user_app/random_user_app
+
+echo "Creating randomuserdb..."
+createdb -U "$DB_USER" randomuserdb
+
+
 if ! command -v python3 &> /dev/null
 then
-    echo "Python3 not found"
+    echo "Python3 not found!"
     exit 1
 fi
 
@@ -29,8 +50,9 @@ fi
 
 echo "venv setup complete"
 
-python -m manage.py makemigrations
-python -m manage.py migrate
+python manage.py makemigrations
+python manage.py makemigrations users
+python manage.py migrate
 
 python -m gunicorn random_user_app.wsgi:application --bind 0.0.0.0:8000 &
 
