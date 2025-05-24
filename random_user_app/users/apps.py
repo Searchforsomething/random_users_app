@@ -1,3 +1,4 @@
+import sys
 import threading
 
 from django.apps import AppConfig
@@ -13,6 +14,7 @@ class UsersConfig(AppConfig):
             try:
                 call_command('load_random_users')
             except Exception as e:
-                print(f'Ошибка при загрузке пользователей: {e}')
+                print(f'Error loading users: {e}')
 
-        threading.Thread(target=run_load_users).start()
+        if 'runserver' in sys.argv or 'gunicorn' in sys.argv[0]:
+            threading.Thread(target=run_load_users).start()
