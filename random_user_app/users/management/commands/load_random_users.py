@@ -1,22 +1,31 @@
 import requests
 from django.core.management.base import BaseCommand
+
 from users.models import User
 
 
 class Command(BaseCommand):
-    help = 'Load 1000 unique random users from API'
+    help = 'Load unique random users from API'
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--count',
+            type=int,
+            default=1000,
+            help='Number of unique users to load (default: 1000)'
+        )
 
     def handle(self, *args, **kwargs):
         if User.objects.exists():
             self.stdout.write(self.style.WARNING("Users already exist. Skipping."))
             return
 
-        TARGET_COUNT = 1000
+        target_count = kwargs['count']
         created_count = 0
         seen_emails = set(User.objects.values_list("email", flat=True))
         users_to_create = []
 
-        while created_count < TARGET_COUNT:
+        while created_count < target_count:
             response = requests.get("https://randomuser.me/api/?results=100")
             if response.status_code != 200:
                 self.stdout.write(self.style.ERROR("Failed to fetch users from API"))
@@ -42,7 +51,7 @@ class Command(BaseCommand):
                     thumbnail=item['picture']['thumbnail'],
                 ))
 
-                if len(new_users) + created_count >= TARGET_COUNT:
+                if len(new_users) + created_count >= target_count:
                     break
 
             User.objects.bulk_create(new_users)

@@ -1,6 +1,5 @@
 from django.db import models
-from django.utils.text import slugify
-from django.urls import reverse
+
 
 class User(models.Model):
     gender = models.CharField(max_length=10)
@@ -13,6 +12,3 @@ class User(models.Model):
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
-
-    def get_absolute_url(self):
-        return reverse('user_detail', kwargs={'slug': self.slug})

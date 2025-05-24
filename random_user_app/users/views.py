@@ -1,18 +1,23 @@
+import random
+
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
 from .models import User
 from .serializers import UserSerializer
-import random
+
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+
 class UserDetailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'id'
+
 
 class RandomUserView(APIView):
     def get(self, request):

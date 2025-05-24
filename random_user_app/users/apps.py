@@ -1,6 +1,5 @@
 import threading
 
-import requests
 from django.apps import AppConfig
 
 
