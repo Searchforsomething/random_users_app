@@ -1,3 +1,5 @@
+from email.policy import default
+
 import requests
 from django.core.management.base import BaseCommand
 
@@ -14,9 +16,15 @@ class Command(BaseCommand):
             default=1000,
             help='Number of unique users to load (default: 1000)'
         )
+        parser.add_argument(
+            '--init',
+            type=bool,
+            default=False,
+            help='Used for marking initial users adding'
+        )
 
     def handle(self, *args, **kwargs):
-        if User.objects.exists():
+        if kwargs['init'] and User.objects.exists():
             self.stdout.write(self.style.WARNING("Users already exist. Skipping."))
             return
 

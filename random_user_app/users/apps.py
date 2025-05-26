@@ -12,9 +12,10 @@ class UsersConfig(AppConfig):
         def run_load_users():
             from django.core.management import call_command
             try:
-                call_command('load_random_users')
+                call_command('load_random_users', init=True)
+                threading.Timer(60, run_load_users).start()
             except Exception as e:
                 print(f'Error loading users: {e}')
 
         if 'runserver' in sys.argv or 'gunicorn' in sys.argv[0]:
-            threading.Thread(target=run_load_users).start()
+            run_load_users()
